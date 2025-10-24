@@ -390,12 +390,17 @@ function iniciarQuiz() {
 
 
    document.getElementById("btn-certificado").addEventListener("click", () => {
+    
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
     const studentName = document.getElementById("nombre").value.trim() || "Estudiante";
-    const studentEmail = document.getElementById("emaildestino").value.trim() || "sin_email@example.com";
+    const studentEmail = document.getElementById("email").value.trim() || "sin_email@example.com";
     const btn = document.getElementById("btn-certificado");
+
+    // Desactivar botón mientras genera
+    btn.disabled = true;
+    btn.textContent = "Generando certificado...";
 
     const img = new Image();
     img.src = "EPS.jpg"; // Ruta del logo
@@ -405,55 +410,146 @@ function iniciarQuiz() {
         doc.addImage(img, "PNG", 75, 10, 60, 30);
         doc.setFont("helvetica", "bold");
         doc.setFontSize(28);
-        doc.setTextColor(0, 102, 204);     // color azul
+        doc.setTextColor(0, 102, 204);
         doc.text("Quiz Interdisciplinario", 105, 60, { align: "center" });
 
         doc.setFontSize(22);
-        doc.setTextColor(0, 153, 51);      // color verde
+        doc.setTextColor(0, 153, 51);
         doc.text("Certificado de Finalización", 105, 80, { align: "center" });
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(16);
-        doc.setTextColor(0, 0, 0);         // color negro
+        doc.setTextColor(0, 0, 0);
         doc.text(`Se otorga a: ${studentName}`, 105, 100, { align: "center" });
-        doc.text(`Casilla de correo: ${studentEmail}`, 105, 110, { align: "center" });
-
-        doc.setFontSize(22);
-        doc.setTextColor(0, 102, 204);     // color azul
-        doc.text("Por completar el Quiz Interdisciplinario", 105, 130, { align: "center" });
-        
-        doc.setFontSize(28);
-        doc.setTextColor(0, 153, 51);      // color verde
-        doc.text(`Puntuación: ${score} / ${totalPorRonda}`, 105, 150, { align: "center" });
+        doc.text("Por completar el Quiz Interdisciplinario", 105, 120, { align: "center" });
+        doc.text(`Puntuación: ${score} / ${totalPorRonda}`, 105, 140, { align: "center" });
 
         doc.setFont("helvetica", "bold");
+        doc.setTextColor(255, 102, 0);
         doc.setFontSize(14);
-        doc.setTextColor(255, 102, 0);     // color naranja        
-        doc.text("Emitido por: Educación Profesional Secundaria - Proyecto EPS", 105, 170, { align: "center" });
-        doc.text("Fecha: " + new Date().toLocaleDateString(), 105, 180, { align: "center" });
+        doc.text("Emitido por: Educación Profesional Secundaria - Proyecto EPS", 105, 160, { align: "center" });
+        doc.text("Fecha: " + new Date().toLocaleDateString(), 105, 170, { align: "center" });
 
         doc.setFont("helvetica", "italic");
-        doc.setTextColor(102, 0, 204);    // color lila
-        doc.text("¡Felicitaciones, sigue aprendiendo y mejorando!", 105, 195, { align: "center" });
+        doc.setTextColor(102, 0, 204);
+        doc.text("¡Felicitaciones, sigue aprendiendo y mejorando!", 105, 185, { align: "center" });
 
-        doc.addImage(img, "PNG", 90, 210, 30, 15);
+        doc.addImage(img, "PNG", 90, 200, 30, 15);
 
         // === Guardar localmente (opcional) ===
         doc.save(`Certificado_${studentName}.pdf`);
 
         // === Convertir a base64 y enviar ===
-        const pdfBase64 = doc.output("datauristring");       
-        }
-        
-        
-    });        
+        const pdfBase64 = doc.output("datauristring");
+
+        fetch("guardar_enviar.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                nombre: studentName,
+                email: studentEmail,
+                pdf: pdfBase64
+            })
+        })
+        .then(res => res.text())
+        .then(data => {
+            console.log(data);
+            alert("📧 Certificado generado y enviado a tu correo.");
+            btn.disabled = false;
+            btn.textContent = "Generar Certificado";
+        })
+        .catch(err => {
+            console.error(err);
+            alert("⚠️ Ocurrió un error al enviar el certificado.");
+            btn.disabled = false;
+            btn.textContent = "Generar Certificado";
+        });
+    };
+});
+
     
     
-    document.getElementById("btn-enviar").addEventListener("click", () => {
-      window.location.href = "seleccionar.html";  
-      //alert("Ingrese su casilla de correo y Seleccione el archivo con su nombre, luego cliquee en Enviar Archivo");
+    
+    //const { jsPDF } = window.jspdf;
+    //const doc = new jsPDF();
+
+    //const studentName = document.getElementById("nombre").value.trim() || "Estudiante";
+    //const studentEmail = document.getElementById("emaildestino").value.trim() || "sin_email@example.com";
+    //const btn = document.getElementById("btn-certificado");
+
+    //const img = new Image();
+    //img.src = "EPS.jpg"; // Ruta del logo
+
+    //img.onload = () => {
+        // === Contenido del PDF ===
+        //doc.addImage(img, "PNG", 75, 10, 60, 30);
+        //doc.setFont("helvetica", "bold");
+        //doc.setFontSize(28);
+        //doc.setTextColor(0, 102, 204);     // color azul
+        //doc.text("Quiz Interdisciplinario", 105, 60, { align: "center" });
+
+        //doc.setFontSize(22);
+        //doc.setTextColor(0, 153, 51);      // color verde
+        //doc.text("Certificado de Finalización", 105, 80, { align: "center" });
+
+        //doc.setFont("helvetica", "normal");
+        //doc.setFontSize(16);
+        //doc.setTextColor(0, 0, 0);         // color negro
+        //doc.text(`Se otorga a: ${studentName}`, 105, 100, { align: "center" });
+        //doc.text(`Casilla de correo: ${studentEmail}`, 105, 110, { align: "center" });
+
+        //doc.setFontSize(22);
+        //doc.setTextColor(0, 102, 204);     // color azul
+        //doc.text("Por completar el Quiz Interdisciplinario", 105, 130, { align: "center" });
+        
+        //doc.setFontSize(28);
+        //doc.setTextColor(0, 153, 51);      // color verde
+        //doc.text(`Puntuación: ${score} / ${totalPorRonda}`, 105, 150, { align: "center" });
+
+        //doc.setFont("helvetica", "bold");
+        //doc.setFontSize(14);
+        //doc.setTextColor(255, 102, 0);     // color naranja        
+        //doc.text("Emitido por: Educación Profesional Secundaria - Proyecto EPS", 105, 170, { align: "center" });
+        //doc.text("Fecha: " + new Date().toLocaleDateString(), 105, 180, { align: "center" });
+
+        //doc.setFont("helvetica", "italic");
+        //doc.setTextColor(102, 0, 204);    // color lila
+        //doc.text("¡Felicitaciones, sigue aprendiendo y mejorando!", 105, 195, { align: "center" });
+
+        //doc.addImage(img, "PNG", 90, 210, 30, 15);
+
+        // === Guardar localmente (opcional) ===
+        //doc.save(`Certificado_${studentName}.pdf`);
+
+        // === Convertir a base64 y enviar ===
+        //const pdfBase64 = doc.output("datauristring");       
+        //}
+        
+        
+    //});        
+    
+    
+    //document.getElementById("btn-enviar").addEventListener("click", () => {
+        //alert("Ingrese su casilla de correo y Seleccione el archivo con su nombre, luego cliquee en Enviar Archivo");
         //const studentEmail = document.getElementById("emaildestino").value.trim() || "sin_email@example.com";
-        
-    });
+        //window.location.href = "seleccionar.html";
+    //});
+
+    document.getElementById("btn-Reiniciar").addEventListener("click", () => {
+    // Reiniciar variables
+    indicePregunta = 0;
+    score = 0;
+
+    // Limpiar formulario
+    document.getElementById("nombre").value = "";
+    document.getElementById("email").value = "";
+
+    // Mostrar el quiz y ocultar el final
+    finalBox.style.display = "none";
+    quizBox.style.display = "block";
+
+    // Barajar preguntas y reiniciar contador
+    preguntas.sort(() => Math.random() - 0.5);
     mostrarPregunta();
+});
 }
