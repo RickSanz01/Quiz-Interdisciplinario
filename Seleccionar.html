@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Enviar mail</title>
+        <style type="text/css">
+            label, input{
+                display: block;
+            }
+            input{
+                margin-bottom: 20px;
+            }
+            input[type="email"]{
+                margin-bottom: 20px;
+                padding: 5px;
+                font-size: 16px;
+                width: 270px;
+            }
+            input[type="submit"]{
+                background-color: #4caf50;
+                border-radius: 5px;
+                padding: 5px 10px;
+                color: #ffffff;
+                cursor: pointer;
+                font-size: 16px;
+                border: none;
+            }
+            input[type="submit"]:hover{
+                background-color: #2f9233;
+            }
+        </style>
+    </head>
+    <body>
+        <form action="enviar.php" method="POST" enctype="multipart/form-data">
+            <h2>Enviar archivo adjunto</h2>
+            <label>Email destinatario:</label>
+            <input type="email" name="emaildestino"/>
+            <label>Seleccione un archivo:</label>
+            <input type="file" name="archivo" />
+            <input type="submit" value="Enviar Archivo"/>
+        </form>
+    </body>
+</html>
