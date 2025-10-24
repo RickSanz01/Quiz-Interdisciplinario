@@ -450,9 +450,10 @@ function iniciarQuiz() {
     
     
     document.getElementById("btn-enviar").addEventListener("click", () => {
-        alert("Ingrese su casilla de correo y Seleccione el archivo con su nombre, luego cliquee en Enviar Archivo");
-        const studentEmail = document.getElementById("emaildestino").value.trim() || "sin_email@example.com";
-        //window.location.href = "seleccionar.html";
+      window.location.href = "seleccionar.html";  
+      //alert("Ingrese su casilla de correo y Seleccione el archivo con su nombre, luego cliquee en Enviar Archivo");
+        //const studentEmail = document.getElementById("emaildestino").value.trim() || "sin_email@example.com";
+        
     });
     mostrarPregunta();
 }
