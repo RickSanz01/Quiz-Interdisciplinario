@@ -43,11 +43,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "✅ El archivo fue enviado correctamente.";
         echo '<script>
             setTimeout(() => {
-            window.location.href = "seleccionar.html";
+            window.location.href = "index.html";
             }, 3000);
             </script>';
     } catch (Exception $e) {
         echo "❌ Error: No se pudo enviar el correo. {$mail->ErrorInfo}";
     }
 }
+
 ?>
