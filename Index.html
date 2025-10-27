@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Enviar mail</title>
+        <style type="text/css">
+            label, input{
+                display: block;
+            }
+            input{
+                margin-bottom: 20px;
+            }
+            input[type="email"]{
+                margin-bottom: 20px;
+                padding: 5px;
+                font-size: 16px;
+                width: 270px;
+            }
+            input[type="submit"]{
+                background-color: #4caf50;
+                border-radius: 5px;
+                padding: 5px 10px;
+                color: #ffffff;
+                cursor: pointer;
+                font-size: 16px;
+                border: none;
+            }
+            input[type="submit"]:hover{
+                background-color: #2f9233;
+            }
+        </style>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+            <div class="quiz-container">
+        <h1>Quiz Interdisciplinario</h1>
+        
+        <div id="quiz-box" style="display: block;">
+            <h3 id="pregunta"></h3>
+            <div id="opciones"></div>
+            <div>
+            <span id="contador">Pregunta 1 de 20</span><br>
+            <span id="score">Correctas: 0</span><br>
+            <span>Tiempo restante: <span id="timer">20</span></span>
+        </div>
+    </div>
+    
+    <div id="final-box" style="display:none;">
+        <h2>¡Quiz finalizado!</h2>
+        <p>Tu puntaje final: <span id="final-score"></span></p>
+        <input type="text" id="nombre" placeholder="Tu nombre">
+        <input type="email" id="email" placeholder="Tu correo">
+        <button id="btn-certificado">Generar Certificado</button>
+        
+        <br><br>
+        
+    </div>
+            
+        <form action="enviar.php" method="POST" enctype="multipart/form-data" id="Form-Data" style="display: none;">
+            <h2>Enviar archivo adjunto</h2>
+            <label>Email destinatario:</label>
+            <input type="email" name="emaildestino"/>
+            <label>Seleccione un archivo:</label>
+            <input type="file" name="archivo" />
+            <input type="submit" value="Enviar Archivo"/>
+            <br>
+            <button id="btn-reiniciar">Reiniciar Quiz</button>
+        </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+    </body>
+</html>
